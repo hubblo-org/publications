@@ -1,0 +1,83 @@
+version: '3.2'
+
+services:
+  app:
+    build:
+      context: ./app
+    ports: 
+      - "5000:5000"
+    networks:
+      - lab-network
+    
+  vegeta:
+    build:
+      context: ./vegeta
+    depends_on:
+      - app
+      - grafana
+      - prometheus
+      - scaphandre
+    networks:
+      - lab-network
+    command: /bin/bash -c 'sleep 10 && echo "GET http://app:5000/" | vegeta attack -duration=200s -rate=500 | tee results.bin | vegeta report'
+
+  grafana:
+    build:
+      context: ./grafana
+    depends_on:
+      - prometheus
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: "secret"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: "/var/lib/grafana/dashboards/sample/sample-dashboard.json"
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    networks:
+      - lab-network
+    volumes:
+      - type: bind
+        source: "./dashboards/sample-dashboard.json"
+        target: "/var/lib/grafana/dashboards/sample/sample-dashboard.json"
+
+  prometheus:
+    build:
+      context: ./prom
+    depends_on:
+      - scaphandre
+    ports:
+      - "9090:9090"
+    volumes:
+      - promdata-scaphandre:/prometheus
+    networks:
+      - lab-network
+
+  scaphandre:
+    image: hubblo/scaphandre:build-PR_84-docker-labels-9
+    ports:
+      - "8080:8080"
+    depends_on:
+        - app
+    volumes:
+      - type: bind
+        source: /proc
+        target: /proc
+      - type: bind
+        source: /sys/class/powercap
+        target: /sys/class/powercap
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+    command: ["prometheus", "--containers"]
+    networks:
+      - lab-network
+
+networks:
+  lab-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.34.0/24
+
+volumes:
+  promdata-scaphandre:
