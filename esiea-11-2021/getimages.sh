@@ -5,6 +5,7 @@ OVA_IMAGE="proxmox.ova"
 MD5SUM="https://raw.githubusercontent.com/hubblo-org/publications/master/esiea-11-2021/md5sum"
 
 curl ${MD5SUM} -s -o md5sum
+curl https://raw.githubusercontent.com/hubblo-org/publications/master/esiea-11-2021/mydomain.xml -s -o mydomain.xml
 
 curl https://sync.nce.re/index.php/s/2EqzdgqxNA3pWn3/download -# -o ${QCOW_IMAGE}
 if [ $? -eq 0 ]; then
