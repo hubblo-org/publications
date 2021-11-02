@@ -17,24 +17,6 @@
         <model fallback='forbid'/>
         <topology sockets='1' dies='1' cores='1' threads='1'/>
             <!--<vendor>Intel</vendor>-->
-        <feature name="pbe" policy="require"></feature>
-        <feature name="tm2" policy="require"></feature>
-        <feature name="est" policy="require"></feature>
-        <feature name="monitor" policy="require"></feature>
-        <feature name="smx" policy="require"></feature>
-        <feature name="ss" policy="require"></feature>
-        <feature name="vme" policy="require"></feature>
-        <feature name="dtes64" policy="require"></feature>
-        <feature name="ht" policy="require"></feature>
-        <feature name="ds" policy="require"></feature>
-        <feature name="pcid" policy="require"></feature>
-        <feature name="tm" policy="require"></feature>
-        <feature name="pdcm" policy="require"></feature>
-        <feature name="vmx" policy="require"></feature>
-        <feature name="ds_cpl" policy="require"></feature>
-        <feature name="xtpr" policy="require"></feature>
-        <feature name="acpi" policy="require"></feature>
-        <feature name="invtsc" policy="require"></feature>
     </cpu>
     <clock offset="utc">
         <timer name="rtc" tickpolicy="catchup">
