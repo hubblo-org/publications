@@ -1,0 +1,64 @@
+<domain type="qemu">
+    <!--CHANGEME-->
+    <name>mydomain</name>
+    <!--CHANGEME-->
+    <memory unit="KiB">1024304</memory>
+    <vcpu>1</vcpu>
+    <os>
+        <type arch="x86_64" machine="pc-i440fx-2.1">hvm</type>
+        <boot dev="hd"></boot>
+    </os>
+    <features>
+        <acpi></acpi>
+        <apic></apic>
+        <pae></pae>
+    </features>
+    <!-- <cpu match="exact" mode="host-model">
+        <model fallback='forbid'/>
+        <topology sockets='1' dies='1' cores='1' threads='1'/>
+            <vendor>Intel</vendor>
+        </cpu>-->
+    <clock offset="utc">
+        <timer name="rtc" tickpolicy="catchup">
+        <timer name="pit" tickpolicy="delay">
+        <timer name="hpet" present="no">
+        </timer></timer></timer>
+    </clock>
+    <on_poweroff>destroy</on_poweroff>
+    <on_reboot>restart</on_reboot>
+    <on_crash>restart</on_crash>
+    <pm>
+        <suspend-to-mem enabled="no"></suspend-to-mem>
+        <suspend-to-disk enabled="no"></suspend-to-disk>
+    </pm>
+    <devices>
+        <disk device="disk" type="file">
+            <driver cache="writeback" name="qemu" type="qcow2"></driver>
+            <!--CHANGEME-->
+            <source file="myimage.qcow2"></source>
+            <!--CHANGEME-->
+            <target bus="scsi" dev="hda"></target>
+        </disk>
+        <controller index="0" model="pci-root" type="pci"></controller>
+        <controller index="0" type="ide"></controller>
+        <controller index="0" type="virtio-serial"></controller>
+        <interface type="bridge">
+            <source bridge="br0"></source>
+            <model type="virtio"></model>
+        </interface>
+        <serial type='pty'>
+          <target type='isa-serial' port='0'>
+            <model name='isa-serial'/>
+          </target>
+        </serial>
+        <console type='pty'>
+          <target type='serial' port='0'/>
+        </console>
+            <!--<channel type="spicevmc"><target name="com.redhat.spice.0" type="virtio"><address bus="0" controller="0" port="1" type="virtio-serial">
+        <input bus="usb" type="tablet">
+        <input bus="ps2" type="mouse">
+        <input bus="ps2" type="keyboard">
+            <graphics autoport="yes" type="spice">
+            <redirdev bus="usb" type="spicevmc"></redirdev>-->
+    </devices>
+</domain>
