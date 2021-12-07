@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: twowheels
+  labels:
+    app: twowheels
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: twowheels
+  template:
+    metadata:
+      labels:
+        app: twowheels
+    spec:
+      containers:
+      - name: twowheels
+        image: bpetit/2wheel
+        ports:
+        - containerPort: 5001
+        volumeMounts:
+            - mountPath: "/var/color"
+              name: colors
+              readOnly: true
+      volumes:
+          - name: colors
+            secret:
+                secretName: colors
